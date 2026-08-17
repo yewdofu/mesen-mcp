@@ -80,6 +80,23 @@ public static class MesenTools
         return client.InvokeAsync("cpu.setRegisters", parameters, cancellationToken);
     }
 
+    [McpServerTool(Name = "mesen_set_controller", OpenWorld = false)]
+    [Description("Sets the complete pressed-button state for a SNES controller. The state remains active until changed or cleared.")]
+    public static Task<JsonElement> SetController(
+        MesenDebugClient client,
+        [Description("Buttons to hold: A, B, X, Y, L, R, Up, Down, Left, Right, Select, or Start. An empty array clears the input.")] string[] buttons,
+        [Description("One-based controller number from 1 to 8. Defaults to controller 1.")] int controller = 1,
+        CancellationToken cancellationToken = default) =>
+        client.InvokeAsync("input.set", new { controller, buttons }, cancellationToken);
+
+    [McpServerTool(Name = "mesen_clear_controller", Idempotent = true, OpenWorld = false)]
+    [Description("Releases all overridden buttons for a SNES controller.")]
+    public static Task<JsonElement> ClearController(
+        MesenDebugClient client,
+        [Description("One-based controller number from 1 to 8. Defaults to controller 1.")] int controller = 1,
+        CancellationToken cancellationToken = default) =>
+        client.InvokeAsync("input.clear", new { controller }, cancellationToken);
+
     [McpServerTool(Name = "mesen_list_memory_regions", ReadOnly = true, OpenWorld = false)]
     [Description("Lists the SNES memory regions available through the MesenCE debug API.")]
     public static Task<JsonElement> ListMemoryRegions(

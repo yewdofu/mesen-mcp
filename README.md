@@ -10,7 +10,7 @@ MesenCEの外部デバッグAPIをstdio MCPツールとして公開するサー�
 ## ビルド
 
 ```powershell
-dotnet build .\MesenCE.McpServer.csproj
+dotnet build .\MesenCE.McpServer.csproj --configuration Release
 ```
 
 ## 使用方法
@@ -35,6 +35,8 @@ dotnet build .\MesenCE.McpServer.csproj
            "run",
            "--project",
            "C:\\path\\to\\mesen-mcp\\MesenCE.McpServer.csproj",
+           "--configuration",
+           "Release",
            "--no-build"
          ],
          "enabled": true
@@ -48,3 +50,5 @@ dotnet build .\MesenCE.McpServer.csproj
 MesenCEへの接続は最初のツール呼び出し時に行います。MesenCEとの接続が切れた場合は、次のツール呼び出し時に再接続します。Named Pipeは単一クライアント用なので、このサーバーの実行中に別の外部デバッグAPIクライアントを同時接続することはできません。
 
 レジスタ、現在命令、メモリの読み書きにはエミュレーションの停止が必要です。先に`mesen_pause`を呼び出してください。メモリツールはMCPから扱いやすいよう、デバッグAPIのBase64ではなく区切りなし16進文字列を入出力します。
+
+`mesen_set_controller`は指定したボタンだけを押した状態にし、その状態を次の設定または解除まで維持します。操作後は`mesen_clear_controller`で解除してください。MCPサーバーがMesenCEから切断された場合は、全コントローラーの入力が自動的に解除されます。
