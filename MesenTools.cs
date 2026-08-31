@@ -104,6 +104,13 @@ public static class MesenTools
         CancellationToken cancellationToken) =>
         client.InvokeAsync("memory.list", cancellationToken: cancellationToken);
 
+    [McpServerTool(Name = "mesen_read_ppu_state", ReadOnly = true, OpenWorld = false)]
+    [Description("Gets the SNES PPU state including each BG layer's tilemap address and character (CHR) base address. Emulation must be paused.")]
+    public static Task<JsonElement> ReadPpuState(
+        MesenDebugClient client,
+        CancellationToken cancellationToken) =>
+        client.InvokeAsync("ppu.getState", cancellationToken: cancellationToken);
+
     [McpServerTool(Name = "mesen_read_memory", ReadOnly = true, OpenWorld = false)]
     [Description("Reads SNES memory and returns its bytes as an uppercase hexadecimal string. Emulation must be paused.")]
     public static async Task<MemoryReadResult> ReadMemory(
